@@ -1,0 +1,11 @@
+Task 1 (Not done but should be easy): Probability that customer has PV.
+
+Task 2: Predict customer PV output
+Shortwave radiation is a strong predictor of the magnitude of power a customer will generate. However, shortwave radiation alone is not enough.
+
+We do not know the customer total PV area which is the strongest indicator of how much power will be produced. This should be somewhat easily determined.
+We can look at the datetime during the entire year that the most solar power was produced. Assuming that this hour is the hour when irrdiance is perpendicular to the solar panel, we can reverse engineer the approximate panel area AKA maximum generation capacity.
+
+We do not know the panel tilt / orientation / tracking / nearby shading. This influences the shape of the daily curve.
+The panel tilt and orientation influences which hour of the day has peak pv production
+Shading could account for consistent deviations from the bell curve shape.
