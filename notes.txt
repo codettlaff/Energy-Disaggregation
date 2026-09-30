@@ -1,11 +1,31 @@
 Task 1 (Not done but should be easy): Probability that customer has PV.
 
-Task 2: Predict customer PV output
-Shortwave radiation is a strong predictor of the magnitude of power a customer will generate. However, shortwave radiation alone is not enough.
+Task 2: Predict customer PV output based on weather data:
+-- Estimate customer max generation capactiy, panel orientation
+-- Use this along with weather data to predict generation
 
-We do not know the customer total PV area which is the strongest indicator of how much power will be produced. This should be somewhat easily determined.
-We can look at the datetime during the entire year that the most solar power was produced. Assuming that this hour is the hour when irrdiance is perpendicular to the solar panel, we can reverse engineer the approximate panel area AKA maximum generation capacity.
+Notes:
+Discrepencies between POA curve shape and PPV curve shape:
+-- Skinniness: Efficiency due to irradiance.
+-- Bias: Panel Angle / Orientation
+-- Skew:
+-- -- Possibly temperature efficiency - temperature has its largest effect during the high-irradiance portion of the day, when the modules absorb more energy causing temperature to rise.
+-- Spikiness
 
-We do not know the panel tilt / orientation / tracking / nearby shading. This influences the shape of the daily curve.
-The panel tilt and orientation influences which hour of the day has peak pv production
-Shading could account for consistent deviations from the bell curve shape.
+Can we estimate the panel orientation from the difference between Normal Irradiance peak hour and PPV peak hour?
+
+The PPV curve is consistently 'skinner' than the irradiance curve.
+Module efficiency tends to decrease at lower irradiance. This can make the beginning and end of the daily PV curve fall away. 
+This is known as low-irradiance loss.
+The NREL/Sandia PVWatts model: For POA/effective irradiance above 125 W/m^2, the simplified model is approximately linear: P_mp \prop E_e.
+But below 125 W/m^2 P_mp \prop E_e^2
+Introducing the efficiency due to irradiance coefficient, and multiplying POA by this coefficient, results in a corrected POA that much more closely matches the PPV curve.
+
+However, the real PPV curves often have a bit of a weird skew to the left or right. (Time-dependent asymmetry).
+Usually it looks 
+
+Task 3: Use PV prediction
+-- Utility does not have directly measured PV: Use weather-based prediction to determine PV, separate from base load.
+-- Utility has directly measured PV: Use discrepancy between weather-based prediction and measured value to detect PV disconnection from the grid.
+-- -- Learn how PV responds to grid disturbances.
+-- -- Create clusters of PV based on how it responds to grid disturbances.
