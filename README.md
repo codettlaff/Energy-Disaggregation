@@ -7,7 +7,7 @@ Energy Disaggregation and Analytics for Behind-the-Meter PV, HVAC, and EV Chargi
 
 ### 2. Navigate to `main` branch. This is the most up-to-date working version.
 
-### 3. Download data folder, add to local clone.
+### 3. Download `data.zip` folder from Releases, extract, and add to local clone.
 
 ### 4. Create Conda environment
 
