@@ -20,7 +20,8 @@ def generate_open_meteo_data():
         'latitude': lat,
         'longitude': lon,
         'start_date': '2010-07-01',
-        'end_date': '2013-06-30',
+        # One day past the Ausgrid range, so the 23:30 slot on 2013-06-30 can be interpolated
+        'end_date': '2013-07-01',
         'hourly': 'temperature_2m,wind_speed_10m,shortwave_radiation,cloud_cover,'
                 'direct_normal_irradiance,diffuse_radiation,sunshine_duration',
         'models': 'era5',
@@ -35,10 +36,15 @@ def generate_open_meteo_data():
     df['datetime'] = pd.to_datetime(df['time'])
     df = df.drop(columns='time')
     df = df.set_index('datetime').resample('30min').interpolate().reset_index()
+    df = df[df['datetime'] <= '2013-06-30 23:30'].reset_index(drop=True)
 
-    # Add solar position
+    # Add solar position. Times are Sydney local; pvlib treats naive times as UTC,
+    # so localise first. The repeated 02:00-02:59 hour when DST ends is treated as
+    # standard time; it is night either way, so the choice does not matter.
+    local_times = pd.DatetimeIndex(df['datetime']).tz_localize(
+        time_zone, ambiguous=False, nonexistent='shift_forward')
     solar_position = pvlib.solarposition.get_solarposition(
-        time=df['datetime'], latitude=lat, longitude=lon)
+        time=local_times, latitude=lat, longitude=lon)
     df['solar_zenith'] = solar_position['zenith'].values
     df['solar_azimuth'] = solar_position['azimuth'].values
 
